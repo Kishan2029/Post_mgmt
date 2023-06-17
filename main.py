@@ -47,3 +47,12 @@ def get_one_post(id:int):
         }
     
 # Create a Post from id
+@app.post("/posts", tags=["posts"])
+def create_post(post:PostSchema):
+    post.id = len(posts)+1
+    posts.append(post.dict())
+    return {
+        "info":"Post Added!",
+        "data":posts
+    }
+    
