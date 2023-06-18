@@ -1,6 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
-from app.model import PostSchema
+from fastapi import FastAPI, Body, Depends
+from app.model import PostSchema, UserSchema, UserLoginSchema
+from app.auth.jwt_handler import signJWT
+
 
 posts = [
     {
@@ -19,7 +21,7 @@ posts = [
         "text": "Koala is arboreal herbivorous maruspial native to Australia."
     },
 ]
-
+users=[]
 app = FastAPI()
 
 
@@ -56,3 +58,25 @@ def create_post(post:PostSchema):
         "data":posts
     }
     
+# Create new user - UserSignUp
+@app.post("/user/signup", tags=["user"])
+def user_signup(user: UserSchema=Body(default=None)):
+    users.append(user)
+    return signJWT(user.email)
+    
+ # Fucntion to check wheather user already exists or not
+def check_user(data:UserLoginSchema):
+    for user in users:
+        if user.email == data.email and user.password == data.password:
+            return True
+    return False
+
+# User login route
+@app.post("/user/login", tags=["user"])
+def user_login(user: UserLoginSchema=Body(default=None)):
+    if check_user(user):
+        return signJWT(user.email)
+    else:   
+        return{
+            "error":"Invalid Login details!"
+        }
