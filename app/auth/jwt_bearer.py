@@ -1,8 +1,8 @@
-#The goal of this file is to check whether the reques tis authorized or not [ verification of the proteced route]
+#The goal of this file is to check whether the requestis authorized or not [verification of the proteced route]
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from .auth_handler import decodeJWT
+from .jwt_handler import decodeToken
 
 
 class JWTBearer(HTTPBearer):
@@ -24,7 +24,7 @@ class JWTBearer(HTTPBearer):
         isTokenValid: bool = False
 
         try:
-            payload = decodeJWT(jwtoken)
+            payload = decodeToken(jwtoken)
         except:
             payload = None
         if payload:
