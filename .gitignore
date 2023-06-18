@@ -4,5 +4,6 @@
 env
 source
 .gitignore
-__pycache__
+__pycache__/
 .vscode
+.DS_Store
