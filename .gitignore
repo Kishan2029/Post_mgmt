@@ -4,3 +4,5 @@
 env
 source
 .gitignore
+__pycache__
+.vscode
